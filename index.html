@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Pase de visita · Nota de evolución</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1E3A8F; --cyan:#48BDEB; --ink:#16213d; --muted:#5b6784;
+  --bg:#eef2f8; --panel:#ffffff; --line:#d5dcea; --paper:#fffefa;
+  --warn:#b4231b; --warnbg:#fdecea; --ok:#1d7a4f;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+header.top{background:var(--navy);color:#fff;padding:14px 20px;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;justify-content:space-between}
+header.top h1{margin:0;font-size:1.25rem;font-weight:700}
+header.top .inst{font-size:.9rem;opacity:.85}
+header.top .stamp{font-size:.9rem;color:var(--cyan)}
+main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:20px;padding:20px;max-width:1400px;margin:0 auto}
+@media (max-width:980px){main{grid-template-columns:1fr}}
+form{display:flex;flex-direction:column;gap:14px}
+fieldset{margin:0;border:1px solid var(--line);border-left:4px solid var(--navy);background:var(--panel);border-radius:6px;padding:14px 16px 16px}
+legend{font-weight:700;color:var(--navy);padding:0 6px;font-size:1rem}
+legend .soap{display:inline-block;background:var(--navy);color:#fff;border-radius:3px;padding:0 7px;margin-right:6px;font-size:.85rem}
+.grid{display:grid;gap:10px 12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.grid.wide{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+label{display:flex;flex-direction:column;gap:3px;font-size:.85rem;color:var(--muted);font-weight:500}
+input,select,textarea{font:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:4px;padding:7px 9px;width:100%}
+textarea{min-height:76px;resize:vertical}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--cyan);outline-offset:1px;border-color:var(--navy)}
+input.flag{border-color:var(--warn);background:var(--warnbg)}
+.inline{flex-direction:row;align-items:center;gap:6px;color:var(--ink)}
+.inline input{width:auto}
+.sys{display:grid;grid-template-columns:150px auto 1fr;gap:6px 12px;align-items:start;padding:8px 0;border-top:1px dashed var(--line)}
+.sys:first-of-type{border-top:0}
+.sys .name{font-weight:600;padding-top:6px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:6px 10px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.seg button[data-v="alt"][aria-pressed="true"]{background:var(--warn)}
+.sys textarea{min-height:44px}
+.sys .normtxt{font-size:.85rem;color:var(--muted);padding-top:6px}
+@media (max-width:640px){.sys{grid-template-columns:1fr}.sys .name{padding-top:0}}
+.alerts{margin-top:10px;display:none;background:var(--warnbg);border:1px solid #f0b8b3;color:var(--warn);border-radius:4px;padding:8px 10px;font-size:.88rem}
+.alerts.show{display:block}
+.alerts ul{margin:4px 0 0;padding-left:18px}
+.hint{font-size:.8rem;color:var(--muted);margin:6px 0 0}
+
+/* Nota tipo hoja de expediente */
+aside{position:sticky;top:12px;align-self:start;display:flex;flex-direction:column;gap:10px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:inherit;font-weight:600;font-size:.9rem;border-radius:4px;padding:8px 14px;cursor:pointer;border:1px solid var(--navy);background:#fff;color:var(--navy)}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.danger{border-color:var(--warn);color:var(--warn)}
+.opts{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.88rem}
+.sheet{background:var(--paper);border:1px solid var(--line);border-top:6px solid var(--navy);border-radius:4px;padding:22px 24px;min-height:420px;box-shadow:0 1px 0 var(--line)}
+.sheet pre{margin:0;white-space:pre-wrap;word-wrap:break-word;font:15.5px/1.65 var(--serif);color:#1b1b1b}
+.sheet .empty{color:var(--muted);font-family:var(--sans);font-size:.9rem}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:4px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+footer{max-width:1400px;margin:0 auto;padding:0 20px 24px;font-size:.8rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+@media print{
+  header.top,form,.tools,.opts,footer,.toast{display:none!important}
+  body{background:#fff}
+  main{display:block;padding:0}
+  aside{position:static}
+  .sheet{border:0;box-shadow:none;padding:0}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Pase de visita · Nota de evolución</h1>
+    <div class="inst">Departamento Médico</div>
+  </div>
+  <div class="stamp" id="stamp"></div>
+</header>
+
+<main>
+<form id="f" autocomplete="off" onsubmit="return false">
+
+  <fieldset>
+    <legend>Identificación</legend>
+    <div class="grid wide">
+      <label>Nombre del residente<input id="nombre"></label>
+      <label>Cédula / expediente<input id="cedula"></label>
+    </div>
+    <div class="grid" style="margin-top:10px">
+      <label>Edad (años)<input id="edad" type="number" min="40" max="120" inputmode="numeric"></label>
+      <label>Área
+        <select id="area">
+          <option value=""></option>
+          <option>Salón 1</option><option>Salón 2</option><option>Salón 3</option><option>Salón 4-5</option>
+          <option>Pensión Madre Rafols</option><option>Pensión Solís</option><option>Pensión Santa Casa</option>
+          <option>P.R.A.</option><option>Residencia Gerardo Venegas</option>
+        </select>
+      </label>
+      <label>Fecha y hora<input id="fecha" type="datetime-local"></label>
+      <label>Tipo de nota
+        <select id="tipo">
+          <option>Nota de evolución</option>
+          <option>Pase de visita</option>
+          <option>Valoración por consulta de Enfermería</option>
+          <option>Control de enfermedad aguda</option>
+          <option>Control de enfermedad crónica</option>
+        </select>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><span class="soap">S</span>Subjetivo</legend>
+    <label>Motivo, síntomas referidos, reporte de Enfermería o familia
+      <textarea id="subj" placeholder="Anotar lo referido por el residente o el personal."></textarea>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend><span class="soap">O</span>Objetivo</legend>
+    <div class="grid">
+      <label>PA sistólica (mmHg)<input id="pas" type="number" inputmode="numeric"></label>
+      <label>PA diastólica (mmHg)<input id="pad" type="number" inputmode="numeric"></label>
+      <label>FC (lpm)<input id="fc" type="number" inputmode="numeric"></label>
+      <label>FR (rpm)<input id="fr" type="number" inputmode="numeric"></label>
+      <label>Temperatura (°C)<input id="temp" type="number" step="0.1" inputmode="decimal"></label>
+      <label>SatO₂ (%)<input id="sat" type="number" inputmode="numeric"></label>
+      <label>Glicemia capilar (mg/dL)<input id="gli" type="number" inputmode="numeric"></label>
+      <label>Dolor (EVA 0-10)<input id="eva" type="number" min="0" max="10" inputmode="numeric"></label>
+    </div>
+    <label class="inline" style="margin-top:8px"><input type="checkbox" id="o2"> SatO₂ con oxígeno suplementario</label>
+    <label id="o2flujoWrap" style="display:none;margin-top:6px;max-width:220px">Flujo de O₂ (L/min)<input id="o2flujo" type="number" step="0.5" inputmode="decimal"></label>
+    <div class="alerts" id="alerts" role="status"></div>
+
+    <label style="margin-top:14px">Estado general
+      <textarea id="general" style="min-height:52px" placeholder="Ej.: consciente, colaborador, orientado en persona, hidratado, afebril al tacto."></textarea>
+    </label>
+
+    <p class="hint">Examen por sistemas: solo los sistemas marcados pasan a la nota. "Normal" inserta el texto que se muestra; "Alterado" usa lo que usted describa.</p>
+    <div id="sistemas"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend><span class="soap">A</span>Análisis</legend>
+    <label>Diagnósticos (uno por línea, con CIE-10 si aplica)
+      <textarea id="dx" placeholder="I10 Hipertensión arterial esencial"></textarea>
+    </label>
+    <label style="margin-top:10px">Impresión clínica
+      <textarea id="impresion"></textarea>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend><span class="soap">P</span>Plan</legend>
+    <label>Indicaciones médicas (una por línea)
+      <textarea id="plan" style="min-height:110px"></textarea>
+    </label>
+    <label style="margin-top:10px">Seguimiento / próximo control
+      <input id="seguimiento">
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Firma</legend>
+    <div class="grid wide">
+      <label>Médico<input id="medico"></label>
+      <label>Código profesional<input id="codigo" placeholder="MED 00000"></label>
+    </div>
+    <p class="hint">Nombre y código se guardan solo en este navegador. Los datos del residente no se guardan en ningún lado.</p>
+  </fieldset>
+
+</form>
+
+<aside>
+  <div class="tools">
+    <button class="btn primary" type="button" id="bCopy">Copiar nota</button>
+    <button class="btn" type="button" id="bTxt">Descargar .txt</button>
+    <button class="btn" type="button" id="bPrint">Imprimir</button>
+    <button class="btn danger" type="button" id="bNew">Nueva nota</button>
+  </div>
+  <div class="opts">
+    <label class="inline"><input type="checkbox" id="optAscii"> Solo ASCII (SEDIMEC)</label>
+    <label class="inline"><input type="checkbox" id="optUpper"> Mayúsculas</label>
+    <label class="inline"><input type="checkbox" id="optSoapLbl" checked> Rótulos S/O/A/P</label>
+  </div>
+  <div class="sheet"><pre id="out"></pre></div>
+</aside>
+</main>
+
+<footer>
+  La aplicación funciona por completo en el navegador: no envía ni almacena datos de residentes (Ley 8968). Los umbrales de alerta de signos vitales son orientativos y no sustituyen el criterio clínico.
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+
+  var SISTEMAS = [
+    {id:"cabeza", name:"Cabeza y cuello", normal:"Normocéfalo, mucosa oral húmeda, cuello sin adenopatías palpables ni ingurgitación yugular."},
+    {id:"cardio", name:"Cardiovascular", normal:"Ruidos cardíacos rítmicos, sin soplos audibles."},
+    {id:"pulmonar", name:"Respiratorio", normal:"Murmullo vesicular presente bilateral, sin ruidos agregados, sin uso de musculatura accesoria."},
+    {id:"abdomen", name:"Abdomen", normal:"Blando, depresible, no doloroso a la palpación, peristalsis presente, sin signos de irritación peritoneal."},
+    {id:"gu", name:"Genitourinario", normal:"Sin globo vesical palpable, puño percusión renal negativa bilateral."},
+    {id:"ext", name:"Extremidades", normal:"Sin edemas, pulsos periféricos presentes y simétricos, llenado capilar menor de 2 segundos."},
+    {id:"piel", name:"Piel y tegumentos", normal:"Piel íntegra, sin lesiones por presión ni signos de infección."},
+    {id:"neuro", name:"Neurológico", normal:"Sin déficit motor focal agregado respecto a su condición basal."}
+  ];
+  var estado = {};
+
+  // Construir examen por sistemas
+  var cont = $("sistemas");
+  SISTEMAS.forEach(function(s){
+    estado[s.id] = "";
+    var row = document.createElement("div");
+    row.className = "sys";
+    row.innerHTML =
+      '<div class="name">'+s.name+'</div>'+
+      '<div class="seg" role="group" aria-label="'+s.name+'">'+
+        '<button type="button" data-v="nor" aria-pressed="false">Normal</button>'+
+        '<button type="button" data-v="alt" aria-pressed="false">Alterado</button>'+
+      '</div>'+
+      '<div class="detail"></div>';
+    var detail = row.querySelector(".detail");
+    var ta = document.createElement("textarea");
+    ta.id = "sx_"+s.id;
+    ta.placeholder = "Describir hallazgos.";
+    ta.addEventListener("input", render);
+    row.querySelectorAll(".seg button").forEach(function(b){
+      b.addEventListener("click", function(){
+        var v = b.getAttribute("data-v");
+        estado[s.id] = (estado[s.id] === v) ? "" : v;
+        row.querySelectorAll(".seg button").forEach(function(x){
+          x.setAttribute("aria-pressed", String(x.getAttribute("data-v") === estado[s.id]));
+        });
+        detail.innerHTML = "";
+        if (estado[s.id] === "nor"){
+          var p = document.createElement("div"); p.className = "normtxt"; p.textContent = s.normal; detail.appendChild(p);
+        } else if (estado[s.id] === "alt"){
+          detail.appendChild(ta); ta.focus();
+        }
+        render();
+      });
+    });
+    cont.appendChild(row);
+  });
+
+  // Fecha actual
+  function ahoraLocal(){
+    var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0,16);
+  }
+  $("fecha").value = ahoraLocal();
+  $("stamp").textContent = new Date().toLocaleDateString("es-CR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+  // Firma persistente (solo datos del médico)
+  try {
+    $("medico").value = localStorage.getItem("pv_medico") || "";
+    $("codigo").value = localStorage.getItem("pv_codigo") || "";
+  } catch(e){}
+  ["medico","codigo"].forEach(function(k){
+    $(k).addEventListener("change", function(){
+      try { localStorage.setItem("pv_"+k, $(k).value.trim()); } catch(e){}
+    });
+  });
+
+  $("o2").addEventListener("change", function(){
+    $("o2flujoWrap").style.display = this.checked ? "flex" : "none"; render();
+  });
+
+  // Utilidades
+  function v(id){ return ($(id).value || "").trim(); }
+  function num(id){ var x = parseFloat($(id).value); return isNaN(x) ? null : x; }
+  function lineas(t){ return t.split(/\n+/).map(function(l){return l.trim();}).filter(Boolean); }
+  function punto(t){ t = t.trim(); return (!t || /[.:;!?]$/.test(t)) ? t : t + "."; }
+  function fechaTxt(){
+    var f = v("fecha"); if (!f) return "";
+    var d = new Date(f);
+    var dd = String(d.getDate()).padStart(2,"0"), mm = String(d.getMonth()+1).padStart(2,"0");
+    var hh = String(d.getHours()).padStart(2,"0"), mi = String(d.getMinutes()).padStart(2,"0");
+    return dd+"/"+mm+"/"+d.getFullYear()+" "+hh+":"+mi;
+  }
+
+  // Alertas orientativas de signos vitales
+  function alertas(){
+    var a = [], fl = {};
+    var pas=num("pas"), pad=num("pad"), fc=num("fc"), fr=num("fr"), t=num("temp"), sat=num("sat"), g=num("gli"), eva=num("eva");
+    if (pas!==null && pas>=180){a.push("PAS ≥ 180 mmHg"); fl.pas=1;}
+    if (pas!==null && pas<90){a.push("PAS < 90 mmHg"); fl.pas=1;}
+    if (pad!==null && pad>=110){a.push("PAD ≥ 110 mmHg"); fl.pad=1;}
+    if (fc!==null && (fc>120 || fc<50)){a.push("FC fuera de 50-120 lpm"); fl.fc=1;}
+    if (fr!==null && (fr>24 || fr<10)){a.push("FR fuera de 10-24 rpm"); fl.fr=1;}
+    if (t!==null && t>=38){a.push("Temperatura ≥ 38 °C"); fl.temp=1;}
+    if (t!==null && t<35.5){a.push("Temperatura < 35,5 °C"); fl.temp=1;}
+    if (sat!==null && sat<90){a.push("SatO₂ < 90 %"); fl.sat=1;}
+    if (g!==null && g<70){a.push("Glicemia < 70 mg/dL"); fl.gli=1;}
+    if (g!==null && g>300){a.push("Glicemia > 300 mg/dL"); fl.gli=1;}
+    if (eva!==null && eva>=7){a.push("Dolor severo (EVA ≥ 7)"); fl.eva=1;}
+    ["pas","pad","fc","fr","temp","sat","gli","eva"].forEach(function(k){ $(k).classList.toggle("flag", !!fl[k]); });
+    var box = $("alerts");
+    if (a.length){
+      box.innerHTML = "<strong>Revisar:</strong><ul><li>"+a.join("</li><li>")+"</li></ul>";
+      box.classList.add("show");
+    } else { box.classList.remove("show"); box.innerHTML = ""; }
+  }
+
+  // Construcción de la nota
+  function construir(){
+    var lbl = $("optSoapLbl").checked;
+    var out = [];
+    var enc = v("tipo").toUpperCase();
+    var ft = fechaTxt();
+    out.push(enc + (ft ? " - " + ft : ""));
+
+    var id = [];
+    if (v("nombre")) id.push("Residente: " + v("nombre"));
+    if (v("cedula")) id.push("Cédula/expediente: " + v("cedula"));
+    var id2 = [];
+    if (v("edad")) id2.push("Edad: " + v("edad") + " años");
+    if (v("area")) id2.push("Área: " + v("area"));
+    if (id.length) out.push(id.join("   "));
+    if (id2.length) out.push(id2.join("   "));
+    out.push("");
+
+    // S
+    if (v("subj")){
+      out.push(lbl ? "S: " + punto(v("subj")) : punto(v("subj")));
+      out.push("");
+    }
+
+    // O
+    var sv = [];
+    if (num("pas")!==null && num("pad")!==null) sv.push("PA " + num("pas") + "/" + num("pad") + " mmHg");
+    else if (num("pas")!==null) sv.push("PAS " + num("pas") + " mmHg");
+    if (num("fc")!==null) sv.push("FC " + num("fc") + " lpm");
+    if (num("fr")!==null) sv.push("FR " + num("fr") + " rpm");
+    if (num("temp")!==null) sv.push("T " + String(num("temp")).replace(".", ",") + " °C");
+    if (num("sat")!==null){
+      var s = "SatO2 " + num("sat") + " %";
+      if ($("o2").checked){
+        s += num("o2flujo")!==null ? " con O2 a " + String(num("o2flujo")).replace(".", ",") + " L/min" : " con O2 suplementario";
+      } else s += " aire ambiente";
+      sv.push(s);
+    }
+    if (num("gli")!==null) sv.push("glicemia capilar " + num("gli") + " mg/dL");
+    if (num("eva")!==null) sv.push("dolor EVA " + num("eva") + "/10");
+
+    var sx = [];
+    SISTEMAS.forEach(function(s){
+      if (estado[s.id] === "nor") sx.push(s.name + ": " + s.normal);
+      if (estado[s.id] === "alt"){
+        var d = v("sx_"+s.id);
+        sx.push(s.name + ": " + (d ? punto(d) : "[describir hallazgo]"));
+      }
+    });
+
+    if (sv.length || v("general") || sx.length){
+      var oLines = [];
+      if (sv.length) oLines.push("Signos vitales: " + sv.join(", ") + ".");
+      if (v("general")) oLines.push(punto(v("general")));
+      if (lbl){
+        out.push("O: " + (oLines.shift() || ""));
+        oLines.forEach(function(l){ out.push(l); });
+      } else oLines.forEach(function(l){ out.push(l); });
+      sx.forEach(function(l){ out.push(l); });
+      out.push("");
+    }
+
+    // A
+    var dx = lineas(v("dx"));
+    if (dx.length || v("impresion")){
+      if (lbl) out.push("A:");
+      if (dx.length){
+        out.push("Diagnósticos:");
+        dx.forEach(function(d, i){ out.push((i+1) + ". " + d); });
+      }
+      if (v("impresion")) out.push((dx.length ? "Impresión clínica: " : "") + punto(v("impresion")));
+      out.push("");
+    }
+
+    // P
+    var pl = lineas(v("plan"));
+    if (pl.length || v("seguimiento")){
+      if (lbl) out.push("P:");
+      pl.forEach(function(p, i){ out.push((i+1) + ". " + punto(p)); });
+      if (v("seguimiento")) out.push("Seguimiento: " + punto(v("seguimiento")));
+      out.push("");
+    }
+
+    if (v("medico") || v("codigo")){
+      out.push([v("medico"), v("codigo")].filter(Boolean).join(" - "));
+    }
+
+    var txt = out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    if ($("optUpper").checked) txt = txt.toLocaleUpperCase("es-CR");
+    if ($("optAscii").checked) txt = aAscii(txt);
+    return txt;
+  }
+
+  function aAscii(t){
+    return t
+      .replace(/°C/g, "C").replace(/°/g, " grados")
+      .replace(/≥/g, ">=").replace(/≤/g, "<=")
+      .replace(/₂/g, "2").replace(/[“”«»]/g, '"').replace(/[‘’]/g, "'")
+      .replace(/[–—]/g, "-").replace(/…/g, "...")
+      .replace(/[¿¡]/g, "")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^\x00-\x7F]/g, "");
+  }
+
+  function render(){
+    alertas();
+    var hayDatos = ["nombre","subj","general","dx","impresion","plan","pas","fc","sat"].some(function(k){ return v(k); }) ||
+                   SISTEMAS.some(function(s){ return estado[s.id]; });
+    var pre = $("out");
+    if (!hayDatos){
+      pre.innerHTML = '<span class="empty">La nota se arma aquí conforme llena el formulario. Solo se incluye lo que usted escriba o marque.</span>';
+    } else pre.textContent = construir();
+  }
+
+  function toast(m){
+    var t = $("toast"); t.textContent = m; t.classList.add("show");
+    clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove("show"); }, 1800);
+  }
+
+  $("f").addEventListener("input", render);
+  $("f").addEventListener("change", render);
+  ["optAscii","optUpper","optSoapLbl"].forEach(function(k){ $(k).addEventListener("change", render); });
+
+  $("bCopy").addEventListener("click", function(){
+    var txt = construir();
+    function fallback(){
+      var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+      ta.select(); try { document.execCommand("copy"); toast("Nota copiada"); } catch(e){ toast("No se pudo copiar; seleccione el texto manualmente"); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(function(){ toast("Nota copiada"); }, fallback);
+    } else fallback();
+  });
+
+  $("bTxt").addEventListener("click", function(){
+    var txt = construir();
+    var nom = (v("nombre") || "nota").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^A-Za-z0-9]+/g,"_");
+    var f = (v("fecha") || ahoraLocal()).slice(0,10);
+    var blob = new Blob([txt], {type:"text/plain;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "Evolucion_" + nom + "_" + f + ".txt";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    toast("Nota descargada");
+  });
+
+  $("bPrint").addEventListener("click", function(){ window.print(); });
+
+  $("bNew").addEventListener("click", function(){
+    if (!confirm("¿Borrar los datos del residente y empezar una nota nueva?")) return;
+    var med = v("medico"), cod = v("codigo");
+    $("f").reset();
+    $("medico").value = med; $("codigo").value = cod;
+    $("fecha").value = ahoraLocal();
+    $("o2flujoWrap").style.display = "none";
+    SISTEMAS.forEach(function(s){ estado[s.id] = ""; });
+    document.querySelectorAll(".seg button").forEach(function(b){ b.setAttribute("aria-pressed","false"); });
+    document.querySelectorAll(".sys .detail").forEach(function(d){ d.innerHTML = ""; });
+    SISTEMAS.forEach(function(s){ var t = $("sx_"+s.id); if (t) t.value = ""; });
+    render();
+    toast("Nota nueva");
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
